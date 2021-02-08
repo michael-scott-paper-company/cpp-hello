@@ -48,7 +48,6 @@ jobs:
         GITHUB_REF: ${{ github.ref }}
       run: |
         codeql-runner init \
-          --config-file .github/codeql/config.yml \
           --github-url "$GITHUB_SERVER_URL" \
           --repository "$GITHUB_REPO" \
           --github-auth "$GITHUB_TOKEN" \

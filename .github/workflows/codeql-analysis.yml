@@ -33,8 +33,10 @@ jobs:
       uses: github/codeql-action/init@v1
       with:
         languages: ${{ matrix.language }}
-        queries: +michael-scott-paper-company/codeql-coding-standards/autosar/src/codeql-suites/autosar-default.qls@master,michael-scott-paper-company/codeql-coding-standards/cpp/cert/src/codeql-suites/cert-default.qls@master
+        queries: +michael-scott-paper-company/codeql-coding-standards/cpp/autosar/src/codeql-suites/autosar-default.qls@master,michael-scott-paper-company/codeql-coding-standards/cpp/cert/src/codeql-suites/cert-default.qls@master
 
+    - run: tree /home/runner/work/_temp/michael-scott-paper-company/codeql-coding-standards/master
+    - run: ls -R /home/runner/work/_temp/michael-scott-paper-company/codeql-coding-standards/master
     - run: cc hello.cpp
 
     - name: Perform CodeQL Analysis

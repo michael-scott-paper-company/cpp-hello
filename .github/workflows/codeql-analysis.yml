@@ -33,14 +33,31 @@ jobs:
       run: |
         mkdir -p ~/.config/codeql
         echo "--search-path $RUNNER_TEMP/michael-scott-paper-company/codeql-coding-standards/master" > ~/.config/codeql/config
-
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
-      with:
-        languages: ${{ matrix.language }}
-        queries: +michael-scott-paper-company/codeql-coding-standards/cpp/autosar/src/codeql-suites/autosar-default.qls@master,michael-scott-paper-company/codeql-coding-standards/cpp/cert/src/codeql-suites/cert-default.qls@master
-    
-    - run: cc hello.cpp
-
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
+   
+    - name: Install codeql-runner
+      run: |
+        wget -q https://github.com/github/codeql-action/releases/latest/download/codeql-runner-linux
+        sudo install -o root -g root -m 0755 codeql-runner-linux /usr/local/bin/codeql-runner
+        
+    - name: Execute CodeQL Runner
+      env:
+        GITHUB_SERVER_URL: https://github.com
+        GITHUB_TOKEN: ${{ github.token }}
+        GITHUB_REPO: ${{ github.repository }}
+        GITHUB_SHA: ${{ github.sha }}
+        GITHUB_REF: ${{ github.ref }}
+      run: |
+        codeql-runner init \
+          --config-file .github/codeql/config.yml \
+          --github-url "$GITHUB_SERVER_URL" \
+          --repository "$GITHUB_REPO" \
+          --github-auth "$GITHUB_TOKEN" \
+          --queries '+michael-scott-paper-company/codeql-coding-standards/cpp/autosar/src/codeql-suites/autosar-default.qls@master,michael-scott-paper-company/codeql-coding-standards/cpp/cert/src/codeql-suites/cert-default.qls@master'
+        source codeql-runner/codeql-env.sh
+        cc hello.cpp
+        codeql-runner analyze \
+          --github-url "$GITHUB_SERVER_URL" \
+          --repository "$GITHUB_REPO" \
+          --github-auth "$GITHUB_TOKEN" \
+          --commit "$GITHUB_SHA" \
+          --ref "$GITHUB_REF"

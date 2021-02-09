@@ -32,7 +32,8 @@ jobs:
     - name: Set CodeQL Search Path
       run: |
         mkdir -p ~/.config/codeql
-        echo "--search-path $RUNNER_TEMP/michael-scott-paper-company/codeql-coding-standards/master" > ~/.config/codeql/config
+        #echo "--search-path $RUNNER_TEMP/michael-scott-paper-company/codeql-coding-standards/master" > ~/.config/codeql/config
+        echo "--tree foo" > ~/.config/codeql/config
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1

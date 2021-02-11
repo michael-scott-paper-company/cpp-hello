@@ -37,7 +37,7 @@ jobs:
     - name: break the build by creating file in temp
       run: mkdir -p $RUNNER_TEMP/michael-scott-paper-company/codeql-coding-standards/master
     - name: fix build by cleaning temp
-      run: rm -rf $RUNNER_TEMP/michael-scott-paper-company/codeql-coding-standards
+      run: rm -rf $RUNNER_TEMP/*
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1

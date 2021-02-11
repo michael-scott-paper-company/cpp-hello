@@ -33,6 +33,8 @@ jobs:
       run: |
         mkdir -p ~/.config/codeql
         echo "--search-path $RUNNER_TEMP/michael-scott-paper-company/codeql-coding-standards/master" > ~/.config/codeql/config
+        
+    - run: mkdir -p $RUNNER_TEMP/michael-scott-paper-company/codeql-coding-standards/master
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1

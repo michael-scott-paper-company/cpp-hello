@@ -13,6 +13,7 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
+    container: ubuntu:20.04
 
     strategy:
       fail-fast: false
@@ -33,6 +34,7 @@ jobs:
       run: |
         mkdir -p ~/.config/codeql
         echo "--search-path $PWD/codeql-runner/michael-scott-paper-company/codeql-coding-standards/master" > ~/.config/codeql/config
+        echo $PWD
    
     - name: Install codeql-runner
       run: |
@@ -47,6 +49,9 @@ jobs:
         GITHUB_SHA: ${{ github.sha }}
         GITHUB_REF: ${{ github.ref }}
       run: |
+        echo $PWD
+        echo $HOME
+        cat $HOME/.config/codeql/config
         codeql-runner init \
           --github-url "$GITHUB_SERVER_URL" \
           --repository "$GITHUB_REPO" \

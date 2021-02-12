@@ -39,8 +39,7 @@ jobs:
         mkdir -p ~/.config/codeql
         echo "--search-path $PWD/codeql-runner/michael-scott-paper-company/codeql-coding-standards/master" > ~/.config/codeql/config
         echo "\$HOME is $HOME"
-        echo -n "~ is "
-        (cd ~ && pwd)
+        echo "~ is" ~
    
     - name: Install codeql-runner
       run: |
@@ -59,7 +58,7 @@ jobs:
         cat $HOME/.config/codeql/config
         
         echo "\$HOME is $HOME"
-        echo -n "~ is" ~
+        echo "~ is" ~
         
         export CODEQL_CONFIG_FILE=~/.config/codeql/config
         codeql-runner init \
@@ -68,11 +67,10 @@ jobs:
           --github-auth "$GITHUB_TOKEN" \
           --queries '+michael-scott-paper-company/codeql-coding-standards/cpp/autosar/src/codeql-suites/autosar-default.qls@master,michael-scott-paper-company/codeql-coding-standards/cpp/cert/src/codeql-suites/cert-default.qls@master'
         
-        /github/home/codeql-runner-tools/CodeQL/0.0.0-20210127/x64/codeql/codeql database trace-command -- /__w/cpp-hello/cpp-hello/codeql-runner/codeql_databases/cpp 'sh -c env'
-        
+        env
+        cat codeql-runner/codeql-env.sh
         codeql-runner autobuild
-        
-        /github/home/codeql-runner-tools/CodeQL/0.0.0-20210127/x64/codeql/codeql database trace-command -- /__w/cpp-hello/cpp-hello/codeql-runner/codeql_databases/cpp 'sh -c env'
+        env
         
         codeql-runner analyze \
           --github-url "$GITHUB_SERVER_URL" \

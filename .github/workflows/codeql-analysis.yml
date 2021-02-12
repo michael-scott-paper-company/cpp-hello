@@ -38,6 +38,9 @@ jobs:
       run: |
         mkdir -p ~/.config/codeql
         echo "--search-path $PWD/codeql-runner/michael-scott-paper-company/codeql-coding-standards/master" > ~/.config/codeql/config
+        echo "\$HOME is $HOME"
+        echo -n "~ is "
+        (cd ~ && pwd)
    
     - name: Install codeql-runner
       run: |
@@ -54,6 +57,11 @@ jobs:
       run: |
         cat ~/.config/codeql/config
         cat $HOME/.config/codeql/config
+        
+        echo "\$HOME is $HOME"
+        echo -n "~ is "
+        (cd ~ && pwd)
+        
         export CODEQL_CONFIG_FILE=~/.config/codeql/config
         codeql-runner init \
           --github-url "$GITHUB_SERVER_URL" \
@@ -80,6 +88,11 @@ jobs:
       run: |
         cat ~/.config/codeql/config
         cat $HOME/.config/codeql/config
+        
+        echo "\$HOME is $HOME"
+        echo -n "~ is "
+        (cd ~ && pwd)
+        
         export CODEQL_CONFIG_FILE=~/.config/codeql/config
         codeql-runner autobuild
         codeql-runner analyze \

@@ -13,7 +13,7 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
-    container: ubuntu:20.04
+    container: docker.pkg.github.com/mario-campos/custom-lgtm-image/triad-ubuntu:20.04
 
     strategy:
       fail-fast: false

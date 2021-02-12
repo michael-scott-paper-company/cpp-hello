@@ -59,8 +59,7 @@ jobs:
         cat $HOME/.config/codeql/config
         
         echo "\$HOME is $HOME"
-        echo -n "~ is "
-        (cd ~ && pwd)
+        echo -n "~ is" ~
         
         export CODEQL_CONFIG_FILE=~/.config/codeql/config
         codeql-runner init \
@@ -69,32 +68,12 @@ jobs:
           --github-auth "$GITHUB_TOKEN" \
           --queries '+michael-scott-paper-company/codeql-coding-standards/cpp/autosar/src/codeql-suites/autosar-default.qls@master,michael-scott-paper-company/codeql-coding-standards/cpp/cert/src/codeql-suites/cert-default.qls@master'
         
-        mkdir $RUNNER_TEMP/logs
-        /github/home/codeql-runner-tools/CodeQL/0.0.0-20210127/x64/codeql/codeql resolve qlpacks --logdir $RUNNER_TEMP/logs
-        tar -czf codeql-resolve-logs.tar.gz $RUNNER_TEMP/logs
-    
-    - uses: actions/upload-artifact@v2
-      with:
-        name: codeql-resolve-logs
-        path: ./codeql-resolve-logs.tar.gz
-
-    - name: Execute CodeQL Runner 2
-      env:
-        GITHUB_SERVER_URL: https://github.com
-        GITHUB_TOKEN: ${{ github.token }}
-        GITHUB_REPO: ${{ github.repository }}
-        GITHUB_SHA: ${{ github.sha }}
-        GITHUB_REF: ${{ github.ref }}
-      run: |
-        cat ~/.config/codeql/config
-        cat $HOME/.config/codeql/config
+        /github/home/codeql-runner-tools/CodeQL/0.0.0-20210127/x64/codeql/codeql database trace-command -- /__w/cpp-hello/cpp-hello/codeql-runner/codeql_databases/cpp 'sh -c env'
         
-        echo "\$HOME is $HOME"
-        echo -n "~ is "
-        (cd ~ && pwd)
-        
-        export CODEQL_CONFIG_FILE=~/.config/codeql/config
         codeql-runner autobuild
+        
+        /github/home/codeql-runner-tools/CodeQL/0.0.0-20210127/x64/codeql/codeql database trace-command -- /__w/cpp-hello/cpp-hello/codeql-runner/codeql_databases/cpp 'sh -c env'
+        
         codeql-runner analyze \
           --github-url "$GITHUB_SERVER_URL" \
           --repository "$GITHUB_REPO" \

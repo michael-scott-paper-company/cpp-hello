@@ -62,6 +62,10 @@ jobs:
         
         CODEQL_CONFIG_FILE=~/.config/codeql/config
         export CODEQL_CONFIG_FILE
+        
+        echo 'Running getent passwd...'
+        getent passwd $(whoami)
+        
         codeql-runner init \
           --github-url "$GITHUB_SERVER_URL" \
           --repository "$GITHUB_REPO" \

@@ -46,7 +46,6 @@ jobs:
         sudo install -o root -g root -m 0755 codeql-runner-linux /usr/local/bin/codeql-runner
         
     - name: Execute CodeQL Runner
-      continue-on-error: true
       env:
         GITHUB_SERVER_URL: https://github.com
         GITHUB_TOKEN: ${{ github.token }}
@@ -54,9 +53,6 @@ jobs:
         GITHUB_SHA: ${{ github.sha }}
         GITHUB_REF: ${{ github.ref }}
       run: |
-        echo $PWD
-        echo $HOME
-        cat $HOME/.config/codeql/config
         codeql-runner init \
           --github-url "$GITHUB_SERVER_URL" \
           --repository "$GITHUB_REPO" \
@@ -66,7 +62,20 @@ jobs:
         mkdir $RUNNER_TEMP/logs
         /github/home/codeql-runner-tools/CodeQL/0.0.0-20210127/x64/codeql/codeql resolve qlpacks --logdir $RUNNER_TEMP/logs
         tar -czf codeql-resolve-logs.tar.gz $RUNNER_TEMP/logs
-        
+    
+    - uses: actions/upload-artifact@v2
+      with:
+        name: codeql-resolve-logs
+        path: ./codeql-resolve-logs.tar.gz
+
+    - name: Execute CodeQL Runner 2
+      env:
+        GITHUB_SERVER_URL: https://github.com
+        GITHUB_TOKEN: ${{ github.token }}
+        GITHUB_REPO: ${{ github.repository }}
+        GITHUB_SHA: ${{ github.sha }}
+        GITHUB_REF: ${{ github.ref }}
+      run: |
         codeql-runner autobuild
         codeql-runner analyze \
           --github-url "$GITHUB_SERVER_URL" \
@@ -74,8 +83,3 @@ jobs:
           --github-auth "$GITHUB_TOKEN" \
           --commit "$GITHUB_SHA" \
           --ref "$GITHUB_REF"
-    
-    - uses: actions/upload-artifact@v2
-      with:
-        name: codeql-resolve-logs
-        path: ./codeql-resolve-logs.tar.gz

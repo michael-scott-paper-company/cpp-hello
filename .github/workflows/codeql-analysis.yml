@@ -60,7 +60,8 @@ jobs:
         echo "\$HOME is $HOME"
         echo "~ is" ~
         
-        export CODEQL_CONFIG_FILE=~/.config/codeql/config
+        CODEQL_CONFIG_FILE=~/.config/codeql/config
+        export CODEQL_CONFIG_FILE
         codeql-runner init \
           --github-url "$GITHUB_SERVER_URL" \
           --repository "$GITHUB_REPO" \

@@ -61,6 +61,11 @@ jobs:
           --repository "$GITHUB_REPO" \
           --github-auth "$GITHUB_TOKEN" \
           --queries '+michael-scott-paper-company/codeql-coding-standards/cpp/autosar/src/codeql-suites/autosar-default.qls@master,michael-scott-paper-company/codeql-coding-standards/cpp/cert/src/codeql-suites/cert-default.qls@master'
+        
+        mkdir $RUNNER_TEMP/logs
+        /github/home/codeql-runner-tools/CodeQL/0.0.0-20210127/x64/codeql/codeql resolve qlpacks --logdir $RUNNER_TEMP/logs
+        tar -czf codeql-resolve-logs.tar.gz $RUNNER_TEMP/logs
+        
         codeql-runner autobuild
         codeql-runner analyze \
           --github-url "$GITHUB_SERVER_URL" \
@@ -68,3 +73,8 @@ jobs:
           --github-auth "$GITHUB_TOKEN" \
           --commit "$GITHUB_SHA" \
           --ref "$GITHUB_REF"
+    
+    - uses: actions/upload-artifact@v2
+      with:
+        name: codeql-resolve-logs
+        path: ./codeql-resolve-logs.tar.gz

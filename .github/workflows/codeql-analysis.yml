@@ -61,8 +61,7 @@ jobs:
           --repository "$GITHUB_REPO" \
           --github-auth "$GITHUB_TOKEN" \
           --queries '+michael-scott-paper-company/codeql-coding-standards/cpp/autosar/src/codeql-suites/autosar-default.qls@master,michael-scott-paper-company/codeql-coding-standards/cpp/cert/src/codeql-suites/cert-default.qls@master'
-        source codeql-runner/codeql-env.sh
-        cc hello.cpp
+        codeql-runner autobuild
         codeql-runner analyze \
           --github-url "$GITHUB_SERVER_URL" \
           --repository "$GITHUB_REPO" \

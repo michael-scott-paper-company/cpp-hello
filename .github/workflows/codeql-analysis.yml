@@ -11,6 +11,11 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
+    container:
+      image: docker.pkg.github.com/mario-campos/custom-lgtm-image/triad-ubuntu:20.04
+      credentials:
+        username: mario-campos
+        password: ${{ secrets.PACKAGES_PAT }}
 
     strategy:
       fail-fast: false

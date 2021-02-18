@@ -2,9 +2,7 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ codeql-runner ]
   workflow_dispatch:
 
 jobs:

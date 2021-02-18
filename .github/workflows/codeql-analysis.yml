@@ -5,8 +5,6 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  schedule:
-    - cron: '34 9 * * 5'
   workflow_dispatch:
 
 jobs:
@@ -28,12 +26,6 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
     
-    - name: Configure access to private repositories
-      env:
-        TOKEN: ${{ secrets.STANDARDS_ACCESS_TOKEN }}
-      run: |
-        git config --global url."https://${TOKEN}@github.com/michael-scott-paper-company/codeql-coding-standards".insteadOf "https://github.com/michael-scott-paper-company/codeql-coding-standards"
-        
     - name: Set CodeQL Search Path
       run: |
         mkdir -p ~/.config/codeql
@@ -46,23 +38,21 @@ jobs:
         
     - name: Execute CodeQL Runner
       env:
-        GITHUB_SERVER_URL: https://github.com
-        GITHUB_TOKEN: ${{ github.token }}
-        GITHUB_REPO: ${{ github.repository }}
-        GITHUB_SHA: ${{ github.sha }}
-        GITHUB_REF: ${{ github.ref }}
+        TOKEN: ${{ github.token }}
+        STANDARDS_ACCESS_TOKEN: ${{ secrets.STANDARDS_ACCESS_TOKEN }}
       run: |
         export CODEQL_CONFIG_FILE=$HOME/.config/codeql/config
 
         codeql-runner init \
           --github-url "$GITHUB_SERVER_URL" \
-          --repository "$GITHUB_REPO" \
-          --github-auth "$GITHUB_TOKEN" \
+          --repository "$GITHUB_REPOSITORY" \
+          --github-auth "$TOKEN" \
+          --external-repository-token "$STANDARDS_ACCESS_TOKEN" \
           --queries '+michael-scott-paper-company/codeql-coding-standards/cpp/autosar/src/codeql-suites/autosar-default.qls@master,michael-scott-paper-company/codeql-coding-standards/cpp/cert/src/codeql-suites/cert-default.qls@master'
         codeql-runner autobuild  
         codeql-runner analyze \
           --github-url "$GITHUB_SERVER_URL" \
-          --repository "$GITHUB_REPO" \
-          --github-auth "$GITHUB_TOKEN" \
+          --repository "$GITHUB_REPOSITORY" \
+          --github-auth "$TOKEN" \
           --commit "$GITHUB_SHA" \
           --ref "$GITHUB_REF"

@@ -26,7 +26,7 @@ jobs:
     
     - name: Set CodeQL Search Path
       run: |
-        TEMP_FILE=$(mktemp)
+        TEMP_FILE=$(mktemp -p "$RUNNER_TEMP")
         echo "--search-path $RUNNER_TEMP/michael-scott-paper-company/codeql-coding-standards/master" > $TEMP_FILE
         echo "CODEQL_CONFIG_FILE=$TEMP_FILE" >> $GITHUB_ENV
    

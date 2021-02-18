@@ -5,8 +5,6 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  schedule:
-    - cron: '34 9 * * 5'
   workflow_dispatch:
 
 jobs:
@@ -25,8 +23,8 @@ jobs:
             
     - name: Set CodeQL Search Path
       run: |
-        mkdir -p ./.config/codeql
-        echo "--search-path $RUNNER_TEMP/michael-scott-paper-company/codeql-coding-standards/master" > ./.config/codeql/config
+        mkdir -p ~/.config/codeql
+        echo "--search-path $RUNNER_TEMP/michael-scott-paper-company/codeql-coding-standards/master" > ~/.config/codeql/config
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
@@ -34,12 +32,8 @@ jobs:
         languages: ${{ matrix.language }}
         external-repository-token: ${{ secrets.STANDARDS_ACCESS_TOKEN }}
         queries: +michael-scott-paper-company/codeql-coding-standards/cpp/autosar/src/codeql-suites/autosar-default.qls@master,michael-scott-paper-company/codeql-coding-standards/cpp/cert/src/codeql-suites/cert-default.qls@master
-      env:
-        CODEQL_CONFIG_FILE: ./.config/codeql/config
     
     - run: cc hello.cpp
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
-      env:
-        CODEQL_CONFIG_FILE: ./config/codeql/config

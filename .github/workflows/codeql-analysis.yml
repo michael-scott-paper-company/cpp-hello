@@ -26,8 +26,9 @@ jobs:
     
     - name: Set CodeQL Search Path
       run: |
-        mkdir -p ~/.config/codeql
-        echo "--search-path $PWD/codeql-runner/michael-scott-paper-company/codeql-coding-standards/master" > ~/.config/codeql/config
+        TEMP_FILE=$(mktemp)
+        echo "--search-path $RUNNER_TEMP/michael-scott-paper-company/codeql-coding-standards/master" > $TEMP_FILE
+        echo "CODEQL_CONFIG_FILE=$TEMP_FILE" >> $GITHUB_ENV
    
     - name: Install codeql-runner
       run: |
@@ -39,8 +40,6 @@ jobs:
         TOKEN: ${{ github.token }}
         STANDARDS_ACCESS_TOKEN: ${{ secrets.STANDARDS_ACCESS_TOKEN }}
       run: |
-        export CODEQL_CONFIG_FILE=$HOME/.config/codeql/config
-
         codeql-runner init \
           --github-url "$GITHUB_SERVER_URL" \
           --repository "$GITHUB_REPOSITORY" \

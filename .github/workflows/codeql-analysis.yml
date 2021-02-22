@@ -2,7 +2,7 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ main ]
+    branches: [ test ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -11,11 +11,6 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
-    container:
-      image: docker.pkg.github.com/mario-campos/custom-lgtm-image/triad-ubuntu:20.04
-      credentials:
-        username: mario-campos
-        password: ${{ secrets.PACKAGES_PAT }}
 
     strategy:
       fail-fast: false
@@ -25,24 +20,14 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-            
-    - name: Set CodeQL Search Path
-      run: |
-        TEMP_FILE=$(mktemp)
-        echo "--search-path $RUNNER_TEMP/michael-scott-paper-company/codeql-coding-standards/master" > $TEMP_FILE
-        echo "CODEQL_CONFIG_FILE=$TEMP_FILE" >> $GITHUB_ENV
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
       with:
         languages: ${{ matrix.language }}
-        external-repository-token: ${{ secrets.STANDARDS_ACCESS_TOKEN }}
-        queries: +michael-scott-paper-company/codeql-coding-standards/cpp/autosar/src/codeql-suites/autosar-default.qls@master,michael-scott-paper-company/codeql-coding-standards/cpp/cert/src/codeql-suites/cert-default.qls@master
     
-    - run: cc hello.cpp
-
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v1
       
     - id: output-codeql-db
       uses: mario-campos/output-codeql-db@main

@@ -19,7 +19,7 @@ int main(int argc, char argv[])
     for (int i = 0; i < n; n--) { // NON_COMPLIANT
     }
     
-    for (auto i = init(); i < 10; inc(&i)) { // COMPLIANT
+    for (auto i = init(); i < 10; inc(i)) { // COMPLIANT
     }
     
     for (int i = 0; i < 10; i = do_foo(), i+1) { // NON_COMPLIANT

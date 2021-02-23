@@ -10,7 +10,7 @@ void inc(int &i)
 
 int do_foo()
 {
-    return 0
+    return 0;
 }
 
 int main(int argc, char argv[])

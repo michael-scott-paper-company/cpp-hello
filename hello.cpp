@@ -1,4 +1,4 @@
-int main(int argc, char argv[])
+int main(int argc, char *argv[])
 {
     constexpr std::int8_t arraySize = 7;
     std::uint32_t array[arraySize] = {0, 1, 2, 3, 4, 5, 6};
